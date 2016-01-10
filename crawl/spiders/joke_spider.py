@@ -1,6 +1,6 @@
 import scrapy
  
-from tutorial.items import JokeItem
+from crawl.items import JokeItem
 
 
 class JokeSpider(scrapy.Spider):
