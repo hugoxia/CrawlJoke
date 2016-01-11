@@ -4,7 +4,7 @@ from crawl.items import JokeItem
 
 
 class JokeSpider(scrapy.Spider):
-    name = "joke"
+    name = "qiubai"
     allowed_domains = ["qiushibaike.com"]
     url_list = []
     for i in range(1, 11):
@@ -25,5 +25,7 @@ class JokeSpider(scrapy.Spider):
                     site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0]
                 item['via'] = unicode('qiushibaike')
                 items.append(item)
+            else:
+                pass
 
         return items
