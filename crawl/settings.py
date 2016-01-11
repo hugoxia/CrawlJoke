@@ -12,5 +12,10 @@ BOT_NAME = 'crawl'
 
 SPIDER_MODULES = ['crawl.spiders']
 NEWSPIDER_MODULE = 'crawl.spiders'
+ITEM_PIPELINES = ['jandan.pipelines.MongoDBPipeline', 'pengfu.pipelines.MongoDBPipeline', 'laifu.pipelines.MongoDBPipeline']
+MONGODB_SERVER = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DB = "crandom"
+MONGODB_COLLECTION = "joke"
 
-USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
+USER_AGENT = 'Mozilla/6.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
