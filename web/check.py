@@ -1,7 +1,11 @@
 from flask import Flask
 from flask import render_template
+from pymongo import MongoClient
 from flask.ext.pymongo import PyMongo
 app = Flask(__name__)
+client = MongoClient('localhost', 27017)
+db = client.crandom
+collection = db.pengfu
 mongo = PyMongo(app)
 
 
@@ -14,8 +18,7 @@ def select():
 def check(via):
     author = ''
     via_url = ''
-    test = mongo.db.via.find()
-    content = test['content']
+    content = collection.find_one({"via": "pengfuwang"})[u'content']
     return render_template('check.html',
                            author=author,
                            via=via,
