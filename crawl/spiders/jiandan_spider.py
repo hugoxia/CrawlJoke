@@ -21,9 +21,21 @@ class JokeSpider(scrapy.Spider):
             img = sub_site.xpath('div[@class="text"]/p/img')
             if len(img) == 0:
                 item = JokeItem()
-                item['id'] = sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/text()').extract()
-                item['content'] = sub_site.xpath('div[@class="text"]/p/text()').extract()
-                item['via_url'] = sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/@href').extract()
+                try:
+                    item['id'] = str(
+                        sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/text()').extract()[0])
+                except IndexError:
+                    item['id'] = None
+                try:
+                    item['content'] = str(
+                        sub_site.xpath('div[@class="text"]/p/text()').extract()[0])
+                except IndexError:
+                    item['content'] = None
+                try:
+                    item['via_url'] = str(
+                        sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/@href').extract()[0])
+                except IndexError:
+                    item['via_url'] = None
                 item['via'] = 'jandanwang'
                 items.append(item)
             else:

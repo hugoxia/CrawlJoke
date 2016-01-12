@@ -20,10 +20,16 @@ class JokeSpider(scrapy.Spider):
             url = site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href')
             if len(url) != 0:
                 item = JokeItem()
-                item['content'] = site.xpath('div[@class="content"]/text()').extract()[0]
-                item['via_url'] = unicode("http://www.qiushibaike.com") + \
-                    site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0]
-                item['via'] = unicode('qiushibaike')
+                try:
+                    item['content'] = str(site.xpath('div[@class="content"]/text()').extract()[0])
+                except IndexError:
+                    item['content'] = None
+                try:
+                    item['via_url'] = str("http://www.qiushibaike.com" + \
+                        site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0])
+                except IndexError:
+                    item['via_url'] = None
+                item['via'] = 'qiushibaike'
                 items.append(item)
             else:
                 pass

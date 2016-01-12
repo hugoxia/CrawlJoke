@@ -17,11 +17,25 @@ class JokeSpider(scrapy.Spider):
         for site in sites:
             sub_site = site.xpath('div[@class="contFont"]')
             item = JokeItem()
-            item['id'] = sub_site.xpath('div[@class="imgbox"]/div[@class="humordatacontent  imgboxBtn"]/id')
-            item['title'] = sub_site.xpath('div[@class="tieTitle"]/a[@href]/text()').extract()
-            item['content'] = sub_site.xpath(
-                'div[@class="imgbox"]/div[@class="humordatacontent  imgboxBtn"]/text()').extract()
-            item['via_url'] = sub_site.xpath('div[@class="tieTitle"]/a/@href').extract()
+            try:
+                item['id'] = str(
+                    sub_site.xpath('div[@class="imgbox"]/div[@class="humordatacontent  imgboxBtn"]/id')[0])
+            except IndexError:
+                item['id'] = None
+            try:
+                item['title'] = str(
+                    sub_site.xpath('div[@class="tieTitle"]/a[@href]/text()').extract()[0])
+            except IndexError:
+                item['title'] = None
+            try:
+                item['content'] = str(sub_site.xpath(
+                'div[@class="imgbox"]/div[@class="humordatacontent  imgboxBtn"]/text()').extract()[0])
+            except IndexError:
+                item['content'] = None
+            try:
+                item['via_url'] = str(sub_site.xpath('div[@class="tieTitle"]/a/@href').extract()[0])
+            except IndexError:
+                item['via_url'] = None
             item['via'] = 'pengfuwang'
             items.append(item)
 

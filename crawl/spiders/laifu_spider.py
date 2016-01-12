@@ -21,17 +21,17 @@ class JokeSpider(scrapy.Spider):
             sub_site = site.xpath('div[@class="post-content stickem-container"]')
             item = JokeItem()
             try:
-                item['id'] = site.xpath('@data-post-id').extract()[0]+''
+                item['id'] = str(site.xpath('@data-post-id').extract()[0])
             except IndexError:
                 item['id'] = None
             try:
-                item['content'] = sub_site.xpath('section[@class="article-content"]\
-                    /p/text()').extract()[0]+''
+                item['content'] = str(sub_site.xpath('section[@class="article-content"]\
+                    /p/text()').extract()[0])
             except IndexError:
                 item['content'] = None
             try:
-                item['via_url'] = 'http://www.laifudao.com/' + \
-                              site.xpath('header[@class="post-header"]/h1/a/@href').extract()[0]
+                item['via_url'] = str('http://www.laifudao.com/' +
+                                      site.xpath('header[@class="post-header"]/h1/a/@href').extract()[0])
             except IndexError:
                 item['via_url'] = None
             item['via'] = 'laifudao'
