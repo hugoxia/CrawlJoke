@@ -22,7 +22,7 @@ class JokeSpider(scrapy.Spider):
             item['content'] = sub_site.xpath(
                 'div[@class="imgbox"]/div[@class="humordatacontent  imgboxBtn"]/text()').extract()
             item['via_url'] = sub_site.xpath('div[@class="tieTitle"]/a/@href').extract()
-            item['via'] = unicode('pengfuwang')
+            item['via'] = 'pengfuwang'
             items.append(item)
 
         return items

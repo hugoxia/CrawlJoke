@@ -24,7 +24,7 @@ class JokeSpider(scrapy.Spider):
                 item['id'] = sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/text()').extract()
                 item['content'] = sub_site.xpath('div[@class="text"]/p/text()').extract()
                 item['via_url'] = sub_site.xpath('div[@class="text"]/span[@class="righttext"]/a/@href').extract()
-                item['via'] = unicode('jandanwang')
+                item['via'] = 'jandanwang'
                 items.append(item)
             else:
                 pass
