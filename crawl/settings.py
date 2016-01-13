@@ -19,4 +19,7 @@ MONGODB_SERVER = "localhost"
 MONGODB_PORT = 27017
 MONGODB_DB = "crandom"
 
+RETRY_TIMES = 2
+RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 403, 404, 408]
+
 USER_AGENT = 'Mozilla/6.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'
