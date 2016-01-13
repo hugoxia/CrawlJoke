@@ -6,7 +6,7 @@ from crawl.items import JokeItem
 
 
 class JokeSpider(scrapy.Spider):
-    name = "laifu"
+    name = "laifudao"
     allowed_domains = ["http://www.laifudao.com/"]
     url_list = []
     for i in range(1, 11):
@@ -15,7 +15,7 @@ class JokeSpider(scrapy.Spider):
     start_urls = url_list
 
     def parse(self, response):
-        sites = response.xpath('//article[re:test(@id, "post-id-\d{6}")]')
+        sites = response.xpath('//article[re:test(@id, "post-id-\d{1,15}")]')
         items = []
         for site in sites:
             sub_site = site.xpath('div[@class="post-content stickem-container"]')
@@ -25,8 +25,8 @@ class JokeSpider(scrapy.Spider):
             except IndexError:
                 item['id'] = None
             try:
-                item['content'] = sub_site.xpath('section[@class="article-content"]\
-                    /p/text()').extract()[0]
+                item['content'] = ''.join(sub_site.xpath('section[@class="article-content"]\
+                    /p//text()').extract())
             except IndexError:
                 item['content'] = None
             try:

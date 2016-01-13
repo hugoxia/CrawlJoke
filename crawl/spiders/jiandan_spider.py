@@ -27,8 +27,8 @@ class JokeSpider(scrapy.Spider):
                 except IndexError:
                     item['id'] = None
                 try:
-                    item['content'] = sub_site.xpath('div[@class="text"]\
-                    /p/text()').extract()[0]
+                    item['content'] = ''.join(sub_site.xpath('div[@class="text"]\
+                    /p//text()').extract())
                 except IndexError:
                     item['content'] = None
                 try:
@@ -36,7 +36,7 @@ class JokeSpider(scrapy.Spider):
                     /span[@class="righttext"]/a/@href').extract()[0]
                 except IndexError:
                     item['via_url'] = None
-                item['via'] = 'jandanwang'
+                item['via'] = 'jandan'
                 items.append(item)
             else:
                 pass

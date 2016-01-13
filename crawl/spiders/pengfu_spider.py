@@ -19,7 +19,7 @@ class JokeSpider(scrapy.Spider):
             item = JokeItem()
             try:
                 item['id'] = sub_site.xpath('div[@class="imgbox"]\
-                /div[@class="humordatacontent  imgboxBtn"]/@id').re('\d{1,10}')[0]
+                /div[@class="humordatacontent  imgboxBtn"]/@id').re('\d{1,15}')[0]
             except IndexError:
                 item['id'] = None
             try:
@@ -37,7 +37,7 @@ class JokeSpider(scrapy.Spider):
                 /a/@href').extract()[0]
             except IndexError:
                 item['via_url'] = None
-            item['via'] = 'pengfuwang'
+            item['via'] = 'pengfu'
             items.append(item)
 
         return items

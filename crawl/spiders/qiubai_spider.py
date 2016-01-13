@@ -21,15 +21,19 @@ class JokeSpider(scrapy.Spider):
             if len(url) != 0:
                 item = JokeItem()
                 try:
-                    item['content'] = str(site.xpath('div[@class="content"]/text()').extract()[0])
+                    item['id'] = site.xpath('@id').re('\d{1,15}')[0]
+                except IndexError:
+                    item['id'] = None
+                try:
+                    item['content'] = ''.join(site.xpath('div[@class="content"]//text()').extract())
                 except IndexError:
                     item['content'] = None
                 try:
-                    item['via_url'] = str("http://www.qiushibaike.com" + \
-                        site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0])
+                    item['via_url'] = "http://www.qiushibaike.com" + \
+                        site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0]
                 except IndexError:
                     item['via_url'] = None
-                item['via'] = 'qiushibaike'
+                item['via'] = 'qiubai'
                 items.append(item)
             else:
                 pass
