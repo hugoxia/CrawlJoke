@@ -20,13 +20,13 @@ class MongoDBPipeline(object):
         self.db = connection[settings.MONGODB_DB]
 
     def process_item(self, item, spider):
-        name = spider.name
+        collection = spider.name
         valid = True
         for data in item:
             if not data:
                 valid = False
                 raise DropItem("Missing {0}!".format(data))
         if valid:
-            self.db[name].insert(dict(item))
-            log.info("%s added to MongoDB database!" % name)
+            self.db[collection].insert(dict(item))
+            log.info("%s added to MongoDB database!" % collection)
         return item
