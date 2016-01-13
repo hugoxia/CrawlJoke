@@ -41,20 +41,3 @@ class JokeSpider(scrapy.Spider):
             items.append(item)
 
         return items
-
-#         return save_joke(filename=name, content=items)
-#
-#
-# def save_joke(folder='collection', filename=None, content=None):
-#     try:
-#         os.chdir('../')
-#         os.mkdir(folder)
-#     except OSError as e:
-#         print(e)
-#     finally:
-#         os.chdir(folder)
-#
-#     with open(filename+'.json', 'w') as f:
-#         jokes_dict = {'jokes': content}
-#         print(jokes_dict)
-#         json.dump(jokes_dict, f)

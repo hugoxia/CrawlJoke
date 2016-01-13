@@ -1,5 +1,5 @@
 import scrapy
- 
+
 from crawl.items import JokeItem
 
 
@@ -11,7 +11,7 @@ class JokeSpider(scrapy.Spider):
         page_url = "http://www.qiushibaike.com/8hr/page/" + str(i)
         url_list.append(page_url)
     start_urls = url_list
- 
+
     def parse(self, response):
         # sel = scrapy.selector.Selector(response)
         sites = response.xpath('//div[@class="article block untagged mb15"]')
@@ -30,7 +30,7 @@ class JokeSpider(scrapy.Spider):
                     item['content'] = None
                 try:
                     item['via_url'] = "http://www.qiushibaike.com" + \
-                        site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0]
+                                      site.xpath('div[@class="author clearfix"]/a[@rel="nofollow"]/@href').extract()[0]
                 except IndexError:
                     item['via_url'] = None
                 item['via'] = 'qiubai'

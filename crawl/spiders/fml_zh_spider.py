@@ -41,4 +41,3 @@ class JokeSpider(scrapy.Spider):
                 pass
 
         return items
-
