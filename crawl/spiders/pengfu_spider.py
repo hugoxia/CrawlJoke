@@ -29,7 +29,7 @@ class JokeSpider(scrapy.Spider):
                 item['title'] = None
             try:
                 item['content'] = sub_site.xpath('div[@class="imgbox"]\
-                /div[@class="humordatacontent  imgboxBtn"]/text()').extract()[0]
+                /div[@class="humordatacontent  imgboxBtn"]/text()').extract()[0].replace('\n', '')
             except IndexError:
                 item['content'] = None
             try:

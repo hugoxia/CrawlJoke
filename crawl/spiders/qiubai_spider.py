@@ -25,7 +25,7 @@ class JokeSpider(scrapy.Spider):
                 except IndexError:
                     item['id'] = None
                 try:
-                    item['content'] = ''.join(site.xpath('div[@class="content"]//text()').extract())
+                    item['content'] = ''.join(site.xpath('div[@class="content"]//text()').extract()).replace('\n', '')
                 except IndexError:
                     item['content'] = None
                 try:
