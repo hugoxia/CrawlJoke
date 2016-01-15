@@ -92,13 +92,14 @@
                 </button>
             </div>
             <div class="col-xs-2 col-sm-1">
-                <a href="/next/{{ id }}">
+                <!--待定-->
+                <a href="/next/{{ next_url }}">
                 <button type="button" class="btn btn-default btn-lg pull-left" >
                     <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> Next
                 </button></a>
             </div>
             <div class="col-xs-2 col-sm-1">
-                <a href="/delete/{{ api_url }}/{{ etag }}">
+                <a href="/delete/{{ via_name }}/{{ id }}/{{ etag }}">
                 <button type="button" class="btn btn-default btn-lg pull-left">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
                 </button></a>
