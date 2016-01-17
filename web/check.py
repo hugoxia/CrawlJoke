@@ -14,9 +14,10 @@ def index(name=None):
     return render_template('index.html', name=name)
 
 
-@app.route('/next/<url>')
-def _next(url):
-    r = requests.get('http://cold.tarsbot.com/' + url)
+@app.route('/next/<via_name>/<id>')
+def _next(via_name, id):
+    r = requests.get('http://cold.tarsbot.com/' + via_name)
+    test = json.JSONDecoder().decode(r.text)
     try:
         _id = json.JSONDecoder().decode(r.text)['_id']
     except (KeyError, IndexError):
@@ -54,10 +55,7 @@ def _next(url):
         api_url = json.JSONDecoder().decode(r.text)['_link']['self']['href']
     except (KeyError, IndexError):
         api_url = None
-    try:
-        next_url = json.JSONDecoder().decode(r.text)['_items'][1]['_link']['self']['href']
-    except (KeyError, IndexError):
-        next_url = None
+    next_url = via_name + '/' + hex(int(id, 16) + int('1', 16))[2:]
     return render_template('check.html',
                            author=author,
                            via=via,
@@ -69,7 +67,7 @@ def _next(url):
                            answer=answer,
                            etag=etag,
                            total=total,
-                           via_name=re.split(r'/', url)[0]
+                           via_name=via_name
                            )
 
 
@@ -123,11 +121,14 @@ def check(via_name):
             api_url = json.JSONDecoder().decode(r.text)['_link']['self']['href']
         except (KeyError, IndexError):
             api_url = None
-        try:
-            next_url = json.JSONDecoder().decode(r.text)['_items'][1]['_link']
-        except (KeyError, IndexError):
+        # try:
+        #     next_url = json.JSONDecoder().decode(r.text)['_items'][0]['_link']
+        # except (KeyError, IndexError):
+        #     next_url = None
+        if _id:
+            next_url = via_name + '/' + hex(int(_id, 16) + int('1', 16))[2:]
+        else:
             next_url = None
-        print(type(next_url))
         return render_template('check.html',
                                author=author,
                                via=via,
