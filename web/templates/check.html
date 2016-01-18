@@ -91,10 +91,9 @@
                     <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> Save
                 </button>
             </div>
-            <div class="col-xs-2 col-sm-1">
-                <!--待定-->
+            <div class="col-xs-2 col-sm-1" id="next_column">
                 <a href="/next/{{ next_url }}">
-                <button type="button" class="btn btn-default btn-lg pull-left" >
+                <button type="button" class="btn btn-default btn-lg pull-left">
                     <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> Next
                 </button></a>
             </div>
@@ -112,5 +111,15 @@
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var via_name = $('#next_column > a').attr('href').split('/')[2];
+        if (via_name == 'None'){
+            $('#next_column > a > button').attr('disabled', 'disabled');
+        }else{
+            console.log(via_name);
+        }
+    });
+</script>
 </body>
 </html>
