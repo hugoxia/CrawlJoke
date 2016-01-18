@@ -84,64 +84,92 @@ def _delete(via_name, _id, etag):
     return redirect("/" + via_name, code=302)
 
 
-@app.route('/<via_name>', methods=['GET', 'POST'])
+@app.route('/<via_name>', methods=['GET', 'POST', 'PUT'])
 def check(via_name):
     if request.method == 'GET':
-        r = requests.get('http://cold.tarsbot.com/' + via_name)
-        try:
-            _id = json.JSONDecoder().decode(r.text)['_items'][0]['_id']
-        except (KeyError, IndexError):
-            _id = None
-        try:
-            author = json.JSONDecoder().decode(r.text)['_items'][0]['author']
-        except (KeyError, IndexError):
-            author = None
-        try:
-            via = json.JSONDecoder().decode(r.text)['_items'][0]['via']
-        except (KeyError, IndexError):
-            via = None
-        try:
-            via_url = json.JSONDecoder().decode(r.text)['_items'][0]['via_url']
-        except (KeyError, IndexError):
-            via_url = None
-        try:
-            content = json.JSONDecoder().decode(r.text)['_items'][0]['content']
-        except (KeyError, IndexError):
-            content = None
-        try:
-            answer = json.JSONDecoder().decode(r.text)['_items'][0]['answer']
-        except (KeyError, IndexError):
-            answer = None
-        try:
-            etag = json.JSONDecoder().decode(r.text)['_items'][0]['_etag']
-        except (KeyError, IndexError):
-            etag = None
-        try:
-            total = json.JSONDecoder().decode(r.text)['_meta']['total']
-        except (KeyError, IndexError):
-            total = None
-        # api_url is the url of current joke
-        try:
-            api_url = json.JSONDecoder().decode(r.text)['_link']['self']['href']
-        except (KeyError, IndexError):
-            api_url = None
-        if _id:
-            next_url = via_name + '/' + hex(int(_id, 16) + int('1', 16))[2:]
+        folder = request.args.get('folder')
+        print(type(folder))
+        if folder:
+            patch_dict = {}
+            _id = None if request.args.get('id') is None else request.args.get('id')
+            answer = None if request.args.get('answer') is None else request.args.get('answer')
+            author = None if request.args.get('author') is None else request.args.get('author')
+            via = None if request.args.get('via') is None else request.args.get('via')
+            via_url = None if request.args.get('via_url') is None else request.args.get('via_url')
+            content = None if request.args.get('edit_text') is None else request.args.get('edit_text')
+            etag = None if request.args.get('etag') is None else request.args.get('etag')
+            if answer != 'None':
+                patch_dict['answer'] = answer
+            if author != 'None':
+                patch_dict['author'] = author
+            if via != 'None':
+                patch_dict['via'] = via
+            if via_url != 'None':
+                patch_dict['via_url'] = via_url
+            if content != 'None':
+                patch_dict['content'] = content
+            headers = {'content-type': 'application/json', 'If-Match': etag}
+            requests.patch('http://cold.tarsbot.com/' + via_name + '/' + _id,
+                           data=json.dumps(patch_dict),
+                           headers=headers,
+                           allow_redirects=False)
+            return 'TEST PATCH'
         else:
-            next_url = None
-        return render_template('check.html',
-                               author=author,
-                               via=via,
-                               id=_id,
-                               via_url=via_url,
-                               api_url=api_url,
-                               next_url=next_url,
-                               content=content,
-                               answer=answer,
-                               etag=etag,
-                               total=total,
-                               via_name=via_name
-                               )
+            r = requests.get('http://cold.tarsbot.com/' + via_name)
+            try:
+                _id = json.JSONDecoder().decode(r.text)['_items'][0]['_id']
+            except (KeyError, IndexError):
+                _id = None
+            try:
+                author = json.JSONDecoder().decode(r.text)['_items'][0]['author']
+            except (KeyError, IndexError):
+                author = None
+            try:
+                via = json.JSONDecoder().decode(r.text)['_items'][0]['via']
+            except (KeyError, IndexError):
+                via = None
+            try:
+                via_url = json.JSONDecoder().decode(r.text)['_items'][0]['via_url']
+            except (KeyError, IndexError):
+                via_url = None
+            try:
+                content = json.JSONDecoder().decode(r.text)['_items'][0]['content']
+            except (KeyError, IndexError):
+                content = None
+            try:
+                answer = json.JSONDecoder().decode(r.text)['_items'][0]['answer']
+            except (KeyError, IndexError):
+                answer = None
+            try:
+                etag = json.JSONDecoder().decode(r.text)['_items'][0]['_etag']
+            except (KeyError, IndexError):
+                etag = None
+            try:
+                total = json.JSONDecoder().decode(r.text)['_meta']['total']
+            except (KeyError, IndexError):
+                total = None
+            # api_url is the url of current joke
+            try:
+                api_url = json.JSONDecoder().decode(r.text)['_link']['self']['href']
+            except (KeyError, IndexError):
+                api_url = None
+            if _id:
+                next_url = via_name + '/' + hex(int(_id, 16) + int('1', 16))[2:]
+            else:
+                next_url = None
+            return render_template('check.html',
+                                   author=author,
+                                   via=via,
+                                   id=_id,
+                                   via_url=via_url,
+                                   api_url=api_url,
+                                   next_url=next_url,
+                                   content=content,
+                                   answer=answer,
+                                   etag=etag,
+                                   total=total,
+                                   via_name=via_name
+                                   )
     elif request.method == 'POST':
         post_dict = {}
         _id = request.form['id']
@@ -175,23 +203,37 @@ def check(via_name):
         return '404'
 
 
-# @app.route('/<via_name>/<_id>', methods=['PUT', 'PATCH'])
-# def check(via_name, _id):
-#     r = requests.get('http://cold.tarsbot.com/' + via_name + '/' + _id)
-#     try:
-#         etag = json.JSONDecoder().decode(r.text)['_etag']
-#     except (KeyError, IndexError):
-#         etag = None
+# @app.route('/<_via_name>/<data_id>', methods=['PUT', 'PATCH'])
+# def check(_via_name, data_id):
 #     if request.method == 'PUT':
 #         return 'TEST PUT'
 #     elif request.method == 'PATCH':
+#         patch_dict = {}
+#         data_id = request.form['id']
+#         answer = request.form['answer']
+#         author = request.form['author']
+#         via = request.form['via']
+#         via_url = request.form['via_url']
+#         content = request.form['edit_text']
+#         etag = request.form['etag']
+#         if answer != 'None':
+#             patch_dict['answer'] = answer
+#         if author != 'None':
+#             patch_dict['author'] = author
+#         if via != 'None':
+#             patch_dict['via'] = via
+#         if via_url != 'None':
+#             patch_dict['via_url'] = via_url
+#         if content != 'None':
+#             patch_dict['content'] = content
 #         headers = {'content-type': 'application/json', 'If-Match': etag}
-#         requests.patch('http://cold.tarsbot.com/' + via_name + '/' + _id,
+#         requests.patch('http://cold.tarsbot.com/' + _via_name + '/' + data_id,
+#                        data=json.dumps(patch_dict),
 #                        headers=headers,
 #                        allow_redirects=False)
-#         return 'TEST DELETE'
+#         return 'TEST PATCH'
 #     else:
-#         return 'TEST'
+#         return 'TEST FAIL'
 
 
 if __name__ == '__main__':

@@ -18,10 +18,10 @@
     <![endif]-->
 </head>
 <body>
-<div class="container-fluid" style="padding:50px">
+<div class="container-fluid" style="padding:50px" id="form_column">
     <form action="/{{ via }}" method="post">
         <div class="row">
-            <div class="col-xs-6 col-sm-6">
+            <div class="col-xs-10 col-sm-10">
                 <h3>目标库</h3>
         <div class="btn-group-lg">
             <label class="btn-lg btn-group-lg" style="cursor: pointer;">
@@ -35,7 +35,7 @@
             </label>
         </div>
             </div>
-            <div class="col-xs-6 col-sm-6">
+            <div class="col-xs-2 col-sm-2">
                 <input type="hidden" class="form-control" name="etag" value="{{ etag }}">
                 <input type="hidden" class="form-control" name="id" value="{{ id }}">
             </div>
@@ -51,28 +51,28 @@
         </fieldset>
         <hr>
         <div class="row">
-            <div class="col-xs-3 col-sm-3">
+            <div class="col-xs-12 col-sm-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon1">作者:</span>
                     <input type="text" class="form-control" name="author" placeholder="{{ author }}"
                            aria-describedby="sizing-addon1" value="{{ author }}">
                 </div>
             </div>
-            <div class="col-xs-3 col-sm-3">
+            <div class="col-xs-12 col-sm-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon2">来源:</span>
                     <input type="text" class="form-control" name="via" placeholder="{{ via }}"
                            aria-describedby="sizing-addon1" value="{{ via }}">
                 </div>
             </div>
-            <div class="col-xs-3 col-sm-3">
+            <div class="col-xs-12 col-sm-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon3">地址:</span>
                     <input type="text" class="form-control" name="via_url" placeholder="{{ via_url }}"
                            aria-describedby="sizing-addon1" value="{{ via_url }}">
                 </div>
             </div>
-            <div class="col-xs-3 col-sm-3">
+            <div class="col-xs-12 col-sm-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon4">答案:</span>
                     <input type="text" class="form-control" name="answer" placeholder="{{ answer }}"
@@ -113,11 +113,14 @@
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
-        var via_name = $('#next_column > a').attr('href').split('/')[2];
-        if (via_name == 'None'){
+        var via = $('#next_column > a').attr('href').split('/')[2];
+        if (via == 'None'){
             $('#next_column > a > button').attr('disabled', 'disabled');
+        }else if (via == 'fml' || via == 'joke' || via == 'dirty'){
+            $('#form_column > form').attr('action', '/' + via);
+            $('#form_column > form').attr('method', 'patch');
         }else{
-            console.log(via_name);
+            console.log(via);
         }
     });
 </script>
